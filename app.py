@@ -41,7 +41,6 @@ def load_page():
     page_index = int(request.form['page_index'])
     user = request.form['user']
     print(page_index, user)
-
     # 主页
     if page_index == 0:
         return render_template('admin/home.html')
