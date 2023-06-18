@@ -1,0 +1,27 @@
+       body {
+            font-family: Arial, sans-serif;
+        }
+
+        #search-results-container {
+            margin: 20px;
+        }
+
+        #search-results-container h2 {
+            color: #333;
+        }
+
+        #search-results-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #search-results-container th,
+        #search-results-container td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #search-results-container th {
+            background-color: #f4f4f4;
+        }

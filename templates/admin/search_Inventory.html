@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>盘点</title>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
+    <script src="{{ url_for('static', filename='js/all-searchItem.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/search.css') }}">
+
+</head>
+<body>
+{#{% extends 'AdministratorUI.html' %}#}
+{% block content %}
+    <div class="container">
+    <h2>盘点</h2>
+    <div class="request_form">
+        <form action="/search_Inventory" method="GET" id="search_Inventory_form">
+            <input type="hidden" name="username" value="{{username}}">
+            <div class="but_s_o2">
+                <button type="button" data-search-option="0" data-user="{{ username }}" value="按物品名">按物品名筛选</button>
+                <button type="button" data-search-option="1" data-user="{{ username }}" value="按存储处">按存储处筛选</button>
+            </div>
+
+            <div class="custom-select">
+                <select name="query" class="select-selected">
+                    {% for option in options %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="text" id="resultInput" name="result" value={{search_index}}>
+            <input type="submit" value="搜索">
+        </form>
+    </div>
+    </div>
+{% endblock %}
+</body>
+</html>

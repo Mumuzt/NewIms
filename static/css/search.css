@@ -1,0 +1,113 @@
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .request_form {
+            margin-bottom: 20px;
+        }
+        
+        .but_s_o1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .but_s_o1 button {
+            margin: 0 10px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .but_s_o1 button:hover {
+            background-color: #45a049;
+        }
+        .but_s_o2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .but_s_o2 button {
+            margin: 0 10px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .but_s_o2 button:hover {
+            background-color: #45a049;
+        }
+        .but_s_o3 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .but_s_o3 button {
+            margin: 0 10px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .but_s_o3 button:hover {
+            background-color: #45a049;
+        }
+        
+        .custom-select {
+            margin-bottom: 10px;
+        }
+        
+        .select-selected {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #fff;
+            font-size: 14px;
+        }
+        
+        .resultInput {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        
+        .submitBtn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .submitBtn:hover {
+            background-color: #45a049;
+        }

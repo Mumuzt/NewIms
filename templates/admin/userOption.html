@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索结果</title>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/SearchResult.css') }}">
+
+{#    <script src="{{ url_for('static', filename='js/pagination.js') }}"></script>#}
+
+</head>
+<body>
+    <div id="search-results-container">
+        <h2>搜索结果</h2>
+        <div>
+            <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>密码</th>
+                    <th>权限</th>
+                </tr>
+            </thead>
+            <div class="search_results">
+              <tbody id="data-table-body">
+                <!-- 使用初始数据填充表格 -->
+                {% for result in results %}
+                <tr>
+                    <td>{{ result[0] }}</td>
+                    <td>{{ result[1] }}</td>
+                    <td>{{ result[2] }}</td>
+                    <td>{{ result[4] }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </div>
+          </table>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索结果</title>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/SearchResult.css') }}">
+    <script src="{{ url_for('static', filename='js/number+o-.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/addItem.js') }}"></script>
+</head>
+<body>
+{% block content_result %}
+        <div id="search-results-container">
+        <h2>搜索结果</h2>
+        <div>
+            <button onclick="toggleForm()">添加物品</button>
+            <div class="item-form111" style="display: none;">
+            <form class="add_new_Item">
+                <input type="text" name="item-name" placeholder="物品名">
+                <input type="text" name="storage-location" placeholder="存储地">
+                <input type="number" name="quantity" placeholder="数量">
+                <button type="submit">提交</button>
+            </form>
+            </div>
+        </div>
+
+            <table>
+            <thead>
+                <tr>
+                    <th>  </th>
+                    <th>ID</th>
+                    <th>物品名</th>
+                    <th>存储处</th>
+                    <th>数量</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>
+{#                            id 用户 物品名#}
+                            <button onclick="delete_Item('{{ result[0] }}','{{username}}','{{ result[1] }}')">
+                                X
+                        </button>
+                        </td>
+                        <td>{{ result[0] }}</td>
+                        <td>{{ result[1] }}</td>
+                        <td>{{ result[2] }}</td>
+                        <td>
+                            <button onclick="decreaseQuantity('{{ result[0] }}', $('.quantity-{{ result[0] }}').val())">-</button>
+                            <input type="number" class="quantity-{{ result[0] }}" value="{{ result[3] }}" onchange="updateQuantity('{{ result[0] }}', this)">
+                            <button onclick="increaseQuantity('{{ result[0] }}', $('.quantity-{{ result[0] }}').val())">+</button>
+                            <button onclick="saveNumber('{{ result[0] }}', $('.quantity-{{ result[0] }}').val(), '{{username}}','{{ result[1] }}')">
+                                √
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3">合计</td>
+                    <td>{{ total }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>统计</h2>
+        <table>
+                <thead>
+                    <tr>
+                        <th>物品名</th>
+                        <th>数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for statistic in statistics %}
+                        <tr>
+                            <td>{{ statistic[0] }}</td>
+                            <td>{{ statistic[1] }}</td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+    </div>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>查询出入库记录</title>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
+    <script src="{{ url_for('static', filename='js/ioku.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/search.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>查询出入库记录</h1>
+    <form action="/search_time" method="GET">
+            <label for="year">选择年份：</label>
+            <select id="year" class="search_year" name="search_year">
+                {% for option1 in product_year %}
+                <option value="{{ option1 }}">{{ option1 }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="month">选择月份：</label>
+            <select id="month" class="search_month" name="search_month">
+                {% for option2 in product_month %}
+                <option value="{{ option2 }}">{{ option2 }}</option>
+                {% endfor %}
+            </select>
+            <label for="waction">选择行为：</label>
+            <select id="waction" class="search_waction" name="search_waction">
+                {% for option3 in product_whitch %}
+                <option value="{{ option3 }}">{{ option3 }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="搜索">
+    </form>
+</div>
+</body>
+</html>
