@@ -57,7 +57,6 @@ def load_page():
         current_month = datetime.now().month
         product_month = [i for i in range(1, 12 + 1)]
         product_month.insert(0, "全部")
-
         conn = POOL.connection()
         cur = conn.cursor()
         cur.execute("SELECT io FROM iolog")
