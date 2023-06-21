@@ -71,7 +71,7 @@
                 url: '/delete_Item',
                 type: 'POST',
                 data: { id: itemId,user:username,item:item},
-                success: function(response) {
+                success: function() {
                     // 保存成功的处理逻辑
                     alert("删除物品成功");
                     callLastRequest();
@@ -81,17 +81,12 @@
                 }
             });
         }
-        function refreshPage() {
-            setTimeout(function() {
-                location.reload();
-            }, 500); // 延迟500毫秒后刷新页面
-        }
         function saveNumber(itemId, value, username,item) {
             $.ajax({
                 url: '/save_number_and_log',
                 type: 'POST',
                 data: { id: itemId, value: value ,user:username,item:item,operation:"save_number"},
-                success: function(response) {
+                success: function() {
                     // 保存成功的处理逻辑
                     console.log('Number saved successfully.');
                     alert("修改成功");
@@ -107,7 +102,7 @@
                 url: '/save_number_and_log',
                 type: 'POST',
                 data: { id: itemId, value: value ,user:username,item:item,operation:"save_Inventory_number"},
-                success: function(response) {
+                success: function() {
                     // 保存成功的处理逻辑
                     console.log('Number saved successfully.');
                     alert("修改成功");
@@ -123,7 +118,7 @@
                 url: '/save_number_and_log',
                 type: 'POST',
                 data: { id: itemId, value: value ,user:username,item:item,operation:"save_Damage_Number"},
-                success: function(response) {
+                success: function() {
                     // 保存成功的处理逻辑
                     console.log('Number saved successfully.');
                     alert("修改成功");
@@ -139,7 +134,7 @@
                 url: '/cancel_DamageNumber',
                 type: 'POST',
                 data: { id: itemId, value: value ,user:username,item:item},
-                success: function(response) {
+                success: function() {
                     // 保存成功的处理逻辑
                     alert("修改成功");
                     callLastRequest();

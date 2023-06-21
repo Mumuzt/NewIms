@@ -79,20 +79,7 @@ $(document).ready(function() {
     load_sreach_options(searchIndex,user);
   });
 
-  function load_sreach_options(searchIndex,user) {
-  $.ajax({
-      url: '/load_sreach_options',
-      type: 'POST',
-      data: { searchIndex: searchIndex, user: user ,operation:"load_sreach_options"},
-      success: function(response) {
-          // 保存成功的处理逻辑
-          $('.content').html(response);
-      },
-      error: function(error) {
-          console.log('Ajax request error:', error);
-      }
-  });
-  }
+
   $('.but_s_o2 button').click(function(event) {
     event.preventDefault(); // 阻止默认的链接行为
 
