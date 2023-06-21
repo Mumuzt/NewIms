@@ -45,7 +45,6 @@
         function updateQuantity(itemId, inputElement) {
             var newValue = inputElement.value; // 获取新的数值
             $('.quantity-' + itemId).val(newValue);
-            // 其他逻辑...
         }
         function updateQuantity_cancel(itemId, inputElement) {
             var newValue = inputElement.value; // 获取新的数值

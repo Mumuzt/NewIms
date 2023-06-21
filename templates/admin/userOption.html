@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>搜索结果</title>
     <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/userEdit.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/SearchResult.css') }}">
 
@@ -13,6 +14,22 @@
 <body>
     <div id="search-results-container">
         <h2>搜索结果</h2>
+        <div class="select_options">
+        添加用户：
+        <form action="{{ url_for('user.add_user') }}" method="post">
+            <input type="text" name="username" placeholder="用户名">
+            <input type="password" name="password" placeholder="密码">
+            <input type="text" name="permission" placeholder="权限">
+            <button type="submit">添加用户</button>
+        </form>
+        <br>
+        删除用户：
+        <form action="{{ url_for('user.delete_user') }}" method="post">
+            <input type="submit" value="删除用户">
+            </form>
+        <br>
+        </div>
+
         <div>
             <table>
             <thead>
@@ -27,11 +44,15 @@
               <tbody id="data-table-body">
                 <!-- 使用初始数据填充表格 -->
                 {% for result in results %}
-                <tr>
+
+                <tr class='user-{{ result[0] }}'>
                     <td>{{ result[0] }}</td>
                     <td>{{ result[1] }}</td>
                     <td>{{ result[2] }}</td>
                     <td>{{ result[4] }}</td>
+                    <td>
+                        <button class="edit-btn" data-id="{{ result[0] }}">编辑</button>
+                    </td>
                 </tr>
                 {% endfor %}
               </tbody>

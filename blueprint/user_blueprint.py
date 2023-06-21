@@ -33,3 +33,45 @@ def login():
             return render_template('login.html', error=error)
     else:
         return render_template('login.html')
+@userUser_bp.route('/get_user', methods=['GET', 'POST'])
+def get_user():
+    userId = request.form['userId']
+    print(userId)
+    conn = POOL.connection()
+    cur = conn.cursor()
+    # 根据userId查询用户信息
+    cur.execute("SELECT * FROM users WHERE Id = %s", (userId))
+    user = cur.fetchone()
+    userInfo = {
+        'userId': user[0],
+        'username': user[1],
+        'password': user[2],
+        'permission': user[4]
+    }
+    cur.close()
+    conn.close()
+    return jsonify(userInfo)
+@userUser_bp.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    return "add_user"
+@userUser_bp.route('/delete_user', methods=['GET', 'POST'])
+def delete_user():
+    return "delete_user"
+@userUser_bp.route('/edit_user', methods=['GET', 'POST'])
+def edit_user():
+    # 获取用户信息
+    userId = request.form['id']
+    username = request.form['username']
+    password = request.form['password']
+    permission = request.form['permission']
+    print(userId, username, password, permission)
+    conn = POOL.connection()
+    cur = conn.cursor()
+    # 根据userId修改用户信息
+    cur.execute("UPDATE users SET username = %s, password = %s, permissions = %s WHERE Id = %s",
+                (username, password, permission, userId))
+    conn.commit()
+    cur.close()
+    conn.close()
+    response = "success"
+    return jsonify(response)

@@ -31,7 +31,8 @@ def favicon():
 # 这里是默认路径 跳转到login.html
 @app.route('/')
 def index():
-    return render_template('login.html')
+    # return render_template('login.html')
+    return render_template('AdministratorUI.html')
 
 
 # 点击导航栏呈现出不同的结果
