@@ -53,10 +53,33 @@ def get_user():
     return jsonify(userInfo)
 @userUser_bp.route('/add_user', methods=['GET', 'POST'])
 def add_user():
-    return "add_user"
+    userName = request.form['username']
+    password = request.form['password']
+    permission = request.form['permission']
+    print(userName, password, permission)
+    conn = POOL.connection()
+    cur = conn.cursor()
+    # 连接users表，将用户信息插入
+    cur.execute("INSERT INTO users(username, password, permissions) VALUES(%s, %s, %s)",
+                (userName, password, permission))
+    conn.commit()
+    cur.close()
+    conn.close()
+    response = "success"
+    return jsonify(response)
 @userUser_bp.route('/delete_user', methods=['GET', 'POST'])
 def delete_user():
-    return "delete_user"
+    # 获取用户信息
+    userId = request.form['userId']
+    conn = POOL.connection()
+    cur = conn.cursor()
+    # 根据userId删除用户
+    cur.execute("DELETE FROM users WHERE Id = %s", (userId))
+    conn.commit()
+    cur.close()
+    conn.close()
+    response = "success"
+    return jsonify(response)
 @userUser_bp.route('/edit_user', methods=['GET', 'POST'])
 def edit_user():
     # 获取用户信息

@@ -19,15 +19,9 @@
         <form action="{{ url_for('user.add_user') }}" method="post">
             <input type="text" name="username" placeholder="用户名">
             <input type="password" name="password" placeholder="密码">
-            <input type="text" name="permission" placeholder="权限">
+            <input type="text" name="permission" placeholder="权限：0管理员 1普通用户">
             <button type="submit">添加用户</button>
         </form>
-        <br>
-        删除用户：
-        <form action="{{ url_for('user.delete_user') }}" method="post">
-            <input type="submit" value="删除用户">
-            </form>
-        <br>
         </div>
 
         <div>
@@ -52,6 +46,7 @@
                     <td>{{ result[4] }}</td>
                     <td>
                         <button class="edit-btn" data-id="{{ result[0] }}">编辑</button>
+                        <button class="del-btn" data-id="{{ result[0] }}">删除</button>
                     </td>
                 </tr>
                 {% endfor %}

@@ -1,4 +1,26 @@
 $(document).ready(function() {
+  $(document).on('click', '.del-btn', function() {
+    var userId = $(this).data('id');
+    if (confirm('确定要删除用户吗？')) {
+          $.ajax({
+      url: '/delete_user',
+      method: 'POST',
+      data: { 'userId': userId },
+      success: function(response) {
+        // 删除成功后，刷新页面
+        alert("删除成功！");
+        window.location.reload();
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+    }else {
+      return false;
+    }
+
+    }
+    );
   $(document).on('click', '.edit-btn', function() {
     var userId = $(this).data('id');
     $.ajax({
@@ -12,7 +34,7 @@ $(document).ready(function() {
             <form class="edit-user-form">
               <input type="hidden" name="id" id="user-id-${userId}" value="${response.userId}">
               <input type="text" name="username" id="username-field-${userId}" value="${response.username}">
-              <input type="password" name="password" id="password-field-${userId}" value="${response.password}">
+              <input type="text" name="password" id="password-field-${userId}" value="${response.password}">
               <input type="text" name="permission" id="permission-field-${userId}" value="${response.permission}">
               <button type="submit">保存</button>
             </form>
