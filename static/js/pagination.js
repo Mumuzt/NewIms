@@ -1,39 +1,49 @@
-window.onload = function() {
-  var currentPageElement = document.getElementById('current-page-element');
-  currentPageElement.innerText = '1'; // 设置初始值为1
-};
+$(document).ready(function () {
+    var resultsJson = window.results;
+    var results = JSON.parse(resultsJson);
+    var currentPage = 1;
+    var itemsPerPage = 10;
 
-function getNextPage() {
-    // 获取当前页码
-    var currentPage = parseInt(document.querySelector('.current-page').innerText);
-    console.log(currentPage);
-    // 发送AJAX请求到后端
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/get_next_page?current_page=' + currentPage, true);
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        // 解析响应的JSON数据
-        var response = JSON.parse(xhr.responseText);
+    function renderTable(data) {
+        var tbody = $("#data-table-body");
+        tbody.empty();
+        data.forEach(function (result) {
+            var row = `<tr>
+                            <td>${result[1]}</td>
+                            <td>${result[2]}</td>
+                            <td>${result[3]}</td>
+                            <td>${result[4]}</td>
+                            <td>${result[5]}</td>
+                       </tr>`;
 
-        // 更新当前页码
-        document.querySelector('.current-page').innerText = response.current_page;
-
-        // 更新表格的新数据
-        var tableBody = document.getElementById('data-table-body');
-        tableBody.innerHTML = ''; // 清除现有的表格数据
-        response.results.forEach(function (result) {
-          var row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${result[0]}</td>
-            <td>${result[1]}</td>
-            <td>${result[2]}</td>
-            <td>${result[3]}</td>
-            <td>${result[4]}</td>
-            <td>${result[5]}</td>
-          `;
-          tableBody.appendChild(row);
+            tbody.append(row);
         });
-      }
-    };
-    xhr.send();
-  }
+    }
+
+    function renderPagination(totalItems, currentPage, itemsPerPage) {
+        var totalPages = Math.ceil(totalItems / itemsPerPage);
+        var pagination = $(".pagination");
+        pagination.empty();
+
+        for (var i = 1; i <= totalPages; i++) {
+            var li = `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#">${i}</a></li>`;
+            pagination.append(li);
+        }
+    }
+
+    function render() {
+        var start = (currentPage - 1) * itemsPerPage;
+        var end = start + itemsPerPage;
+        var pageData = results.slice(start, end);
+        renderTable(pageData);
+        renderPagination(results.length, currentPage, itemsPerPage);
+    }
+
+    $(document).on("click", ".page-item", function (event) {
+        event.preventDefault();
+        currentPage = parseInt($(this).text());
+        render();
+    });
+
+    render();
+});

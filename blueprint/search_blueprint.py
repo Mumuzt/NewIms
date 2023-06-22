@@ -28,6 +28,7 @@ def load_sreach_options():
         if searchIndex == 0:
             # 执行查询
             product_names = [result[1] for result in results]
+            product_names = list(set(product_names))
             # 关闭数据库连接
             cur.close()
             conn.close()
@@ -35,7 +36,7 @@ def load_sreach_options():
             return render_template('admin/search.html', options=product_names, search_index=searchIndex, username=user)
         elif searchIndex == 1:
             product_names = [result[2] for result in results]
-
+            product_names = list(set(product_names))
             cur.close()
             conn.close()
             product_names.insert(0, "全部")
@@ -46,6 +47,7 @@ def load_sreach_options():
         if searchIndex == 0:
             # 执行查询
             product_names = [result[1] for result in results]
+            product_names = list(set(product_names))
             # 关闭数据库连接
             cur.close()
             conn.close()
@@ -53,6 +55,7 @@ def load_sreach_options():
             return render_template('admin/search_Inventory.html', options=product_names, search_index=searchIndex, username=user)
         elif searchIndex == 1:
             product_names = [result[2] for result in results]
+            product_names = list(set(product_names))
             cur.close()
             conn.close()
             product_names.insert(0, "全部")
@@ -62,6 +65,7 @@ def load_sreach_options():
         if searchIndex == 0:
             # 执行查询
             product_names = [result[1] for result in results]
+            product_names = list(set(product_names))
             # 关闭数据库连接
             cur.close()
             conn.close()
@@ -69,10 +73,30 @@ def load_sreach_options():
             return render_template('admin/search_damage.html', options=product_names, search_index=searchIndex, username=user)
         elif searchIndex == 1:
             product_names = [result[2] for result in results]
+            product_names = list(set(product_names))
             cur.close()
             product_names.insert(0, "全部")
             return render_template('admin/search_damage.html', options=product_names, search_index=searchIndex, username=user)
-
+@search_bp.route('/search_old_Item', methods=['GET'])
+def search_old_Item():
+    # 连接数据库
+    conn = POOL.connection()
+    cur = conn.cursor()
+    # 查询数据库中inventory表的数据
+    cur.execute("SELECT ProductName FROM inventory")
+    ItemName = cur.fetchall()
+    cur.execute("SELECT Location FROM inventory")
+    Location = cur.fetchall()
+    # 关闭数据库连接
+    cur.close()
+    conn.close()
+    ItemName = list(set([x[0] for x in ItemName]))
+    Location = list(set([x[0] for x in Location]))
+    result = {
+        "ItemName": ItemName,
+        "Location": Location
+    }
+    return jsonify(result)
 #普通查询
 # 根据搜索限制（物品名/存储地）搜索相应的结果
 @search_bp.route('/search', methods=['GET'])

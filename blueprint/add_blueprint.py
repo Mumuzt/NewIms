@@ -11,6 +11,7 @@ def add_newItem():
         item_name = request.form['item-name']
         save_place = request.form['storage-location']
         number = request.form['quantity']
+
         if number=="":
             number=0
         print(item_name,save_place,number)

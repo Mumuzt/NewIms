@@ -13,11 +13,32 @@
         <div id="search-results-container">
         <h2>搜索结果</h2>
         <div>
-            <button onclick="toggleForm()">添加物品</button>
+            <button onclick="toggleForm1()">添加新物品</button>
             <div class="item-form111" style="display: none;">
-            <form class="add_new_Item">
-                <input type="text" name="item-name" placeholder="物品名">
-                <input type="text" name="storage-location" placeholder="存储地">
+            <form class="add_new_Item" id="add_new_Item">
+                <input type="text" name="item-name-add" placeholder="物品名">
+                <input type="text" name="storage-location-add" placeholder="存储地">
+                <input type="number" name="quantity-add" placeholder="数量">
+                <button type="submit">提交</button>
+            </form>
+            </div>
+        </div>
+        <div>
+            <button id="search_old_Item" type="button">添加现有物品</button>
+            <div class="item-form222" style="display: none;">
+            <form class="add_old_Item" id="add_old_Item">
+                    <select name="item-name">
+                        <!-- 添加选项到下拉菜单中 -->
+                        {% for item_name in item_names %}
+                            <option value="{{ item_name }}">{{ item_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="storage-location">
+                        <!-- 添加选项到下拉菜单中 -->
+                        {% for location in locations %}
+                            <option value="{{ location }}">{{ location }}</option>
+                        {% endfor %}
+                    </select>
                 <input type="number" name="quantity" placeholder="数量">
                 <button type="submit">提交</button>
             </form>
@@ -28,7 +49,6 @@
             <thead>
                 <tr>
                     <th>  </th>
-                    <th>ID</th>
                     <th>物品名</th>
                     <th>存储处</th>
                     <th>数量</th>
@@ -41,9 +61,8 @@
 {#                            id 用户 物品名#}
                             <button onclick="delete_Item('{{ result[0] }}','{{username}}','{{ result[1] }}')">
                                 X
-                        </button>
+                            </button>
                         </td>
-                        <td>{{ result[0] }}</td>
                         <td>{{ result[1] }}</td>
                         <td>{{ result[2] }}</td>
                         <td>
