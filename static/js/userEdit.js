@@ -21,6 +21,36 @@ $(document).ready(function() {
 
     }
     );
+    $(document).on('submit', '.add-user-form', function() {
+    //   得到表单数据
+        var formData = {
+        username: $('#username-add').val(),
+        password: $('#password-add').val(),
+        permission: $('#permission-add').val()
+        };
+        // 发送AJAX请求到Flask后端
+        $.ajax({
+        type: "POST",
+        url: "/add_user",  // 替换为您的Flask路由
+        data: {
+            'username': formData.username,
+            'password': formData.password,
+            'permission': formData.permission
+        },
+        success: function (response) {
+    // 处理服务器返回的响应
+            alert("添加成功！");
+                console.log(response);
+        },
+        error: function (err) {
+    // 处理错误情况
+                console.error("Error:", err);
+
+        }
+
+        },);
+    }
+    );
   $(document).on('click', '.edit-btn', function() {
     var userId = $(this).data('id');
     $.ajax({
