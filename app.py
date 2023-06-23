@@ -43,7 +43,7 @@ def load_page():
     print(page_index, user)
     # 主页
     if page_index == 0:
-        return render_template('admin/home.html')
+        html_content = render_template('admin/home.html')
 
     # 查询+出入库
     elif page_index == 1:
@@ -74,6 +74,7 @@ def load_page():
     elif page_index == 4:
         html_content = render_template('admin/search_damage.html', username=user)
     elif page_index == 5:
+
         conn = POOL.connection()
         cur = conn.cursor()
         cur.execute("SELECT * FROM users")
@@ -83,6 +84,7 @@ def load_page():
         html_content = render_template('admin/userOption.html', username=user,results = results)
     elif page_index == 6:
         pass
+
 
     return jsonify(html_content=html_content)
 
