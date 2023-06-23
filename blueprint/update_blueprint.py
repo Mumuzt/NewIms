@@ -37,7 +37,9 @@ def save_number_and_log():
     value = request.form.get('value')
     user = request.form.get('user')
     item = request.form.get('item')
+
     operation = request.form.get('operation')  # 新增一个名为operation的参数来区分不同的操作
+
     print(item_id, value, user, item,operation)
 
     try:

@@ -2,6 +2,4 @@ DBUtils==3.0.3
 Flask==2.3.2
 flask_paginate==2022.1.8
 PyMySQL==1.0.3
-
-waitress~=2.1.2
 app~=0.0.1

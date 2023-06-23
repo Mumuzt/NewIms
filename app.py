@@ -66,6 +66,7 @@ def load_page():
         unique_io.insert(0, "全部")
         cur.close()
         conn.close()
+
         html_content = render_template('admin/ioku.html', product_year=product_year, product_month=product_month,
                                        product_whitch=unique_io)
     # 盘点
