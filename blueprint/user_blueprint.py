@@ -24,7 +24,7 @@ def login():
             username = session['username'] = user[1]  # 假设用户名在第二个位置
             print(username)
             if user[4] == '1':
-                return render_template('AdministratorUI.html', username=username)
+                return render_template('leftNavigation.html', username=username)
             else:
                 return render_template('NormalUI.html', username=username)
         else:

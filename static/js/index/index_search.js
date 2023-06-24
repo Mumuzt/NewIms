@@ -2,12 +2,12 @@
 
 // Load the initial content
 $(document).ready(function () {
-    loadContent('AdministratorUI');
 });
-function loadContent(pageName) {
+function loadContent(pageName,username) {
     $.ajax({
         url: `/inedx_page/${pageName}`,
         method: 'GET',
+        data: {username:username},
         success: function (data) {
             $('#Index_content').html(data);
         },

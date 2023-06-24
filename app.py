@@ -4,6 +4,8 @@ from flask import Flask, render_template, request, jsonify
 from flask import send_from_directory
 from datetime import datetime
 from sqlPool import POOL
+from collections import defaultdict
+
 
 from blueprint.search_blueprint import search_bp
 from blueprint.update_blueprint import update_bp
@@ -44,9 +46,22 @@ def load_page():
     print(page_index, user)
     # 主页
     if page_index == 0:
-        html_content = render_template('admin/home.html')
+        # 连接数据库
+        conn = POOL.connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM inventory")
+        results = cur.fetchall()
 
-    # 查询+出入库
+        total = sum(result1[3] for result1 in results)
+        print(total)
+        data = results
+        item_totals = defaultdict(int)
+        for item in data:
+            item_name, quantity = item[1], item[3]
+            item_totals[item_name] += quantity
+        html_content = render_template('admin/home.html', results=results, total=total, statistics=tuple(item_totals.items()))
+
+    # 物品出入库
     elif page_index == 1:
         html_content = render_template('admin/search.html', username=user)
     # 出入库记录
@@ -83,7 +98,7 @@ def load_page():
         results = cur.fetchall()
         cur.close()
         conn.close()
-        html_content = render_template('admin/userOption.html', username=user,results = results)
+        html_content = render_template('admin/userOption.html',username=user,results=results)
     elif page_index == 6:
         pass
 
@@ -101,7 +116,9 @@ def get_next_page():
 
 @app.route('/inedx_page/<string:page_name>')
 def inedx_page(page_name):
-    return render_template(f'{page_name}.html')
+    username = request.args.get('username')
+    print(username)
+    return render_template(f'{page_name}.html',username = username )
 
 if __name__ == '__main__':
     # app.secret_key = 'your_secret_key'

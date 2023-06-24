@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>搜索结果</title>
+    <title>首页</title>
     <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
-    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/kucun/SearchResult.css') }}">
+{#    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/kucun/SearchResult.css') }}">#}
     <script src="{{ url_for('static', filename='js/kucun/number+o-.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/kucun/addItem.js') }}"></script>
     <style>
     body {
         font-family: Arial, sans-serif;
@@ -84,35 +85,27 @@
 </head>
 <body>
 {% block content_result %}
-    <div id="search-results-container">
-        <h2>搜索结果</h2>
+        <div id="search-results-container">
+        <h2>全库房总库存</h2>
             <table>
             <thead>
                 <tr>
                     <th>物品名</th>
                     <th>存储处</th>
                     <th>数量</th>
-                    <th>盘点数量</th>
                 </tr>
             </thead>
             <tbody>
                 {% for result in results %}
                     <tr>
+
                         <td>{{ result[1] }}</td>
                         <td>{{ result[2] }}</td>
-                        <td>{{ result[3] }}</td>
-                        <td>
-                            <button onclick="decreaseQuantity('{{ result[0] }}', $('.quantity-{{ result[0] }}').val())">-</button>
-                            <input type="number" class="quantity-{{ result[0] }}" value="{{ result[3] }}" onchange="updateQuantity('{{ result[0] }}', this)">
-                            <button onclick="increaseQuantity('{{ result[0] }}', $('.quantity-{{ result[0] }}').val())">+</button>
-                            <button onclick="saveInventoryNumber('{{ result[0] }}', $('.quantity-{{ result[0] }}').val(), '{{username}}','{{ result[1] }}')">
-                                √
-                            </button>
-                        </td>
+                        <td>{{ result[3]}}</td>
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td colspan="3">合计</td>
+                    <td colspan="2">合计</td>
                     <td>{{ total }}</td>
                 </tr>
             </tbody>
@@ -134,7 +127,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-
     </div>
 {% endblock %}
 </body>

@@ -4,63 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>左侧导航栏示例</title>
+{#    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css') }}">#}
 {#    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/index/index_search.css') }}">#}
     <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/index/index_search.js') }}"></script>
     <style>
-    body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
 
-  .container {
-    display: flex;
-    height: 100vh;
-  }
+        .container {
+            display: flex;
+        }
 
-  .sidebar {
-    width: 20%;
-    background-color: #f8f9fa;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
+        .sidebar {
+            width: 250px; /* 设置固定宽度 */
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
 
-  .sidebar a {
-    text-decoration: none;
-    color: #333;
-    padding: 10px;
-    margin: 5px 0;
-    width: 100%;
-    text-align:center;
-    background-color:#e9ecef;
-    border-radius: 5px;
-  }
+        .sidebar a {
+            text-decoration: none;
+            color: #333;
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            text-align:center;
+            background-color:#e9ecef;
+            border-radius: 5px;
+        }
 
-  .sidebar a:hover {
-    background-color: #495057;
-    color: #fff;
-  }
+        .sidebar a:hover {
+            background-color: #495057;
+            color: #fff;
+        }
 
-  .Index_content {
-    flex: 1;
-    padding: 20px;
-    background-color: #fff;
-  }
-
-  .content iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
+        .Index_content {
+            flex: 1; /* 设置内容区域填充剩余空间 */
+            padding: 20px;
+            background-color: #f2f2f2;
+            {#overflow: auto; /* 添加滚动条，如果内容超出容器大小 */#}
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
-            <a href="#" onclick="loadContent('AdministratorUI');">出入库管理系统</a>
-            <a href="#" onclick="loadContent('VPNAdminSystem');">VPN管理系统</a>
+            <a href="#" onclick="loadContent('AdministratorUI',{{ username }});">出入库管理系统</a>
+            <a href="#" onclick="loadContent('VPNAdminSystem',{{ username }});">VPN管理系统</a>
             <a href="#" onclick="loadContent('page3');">暂存</a>
             <a href="#" onclick="loadContent('page4');">暂存</a>
         </div>

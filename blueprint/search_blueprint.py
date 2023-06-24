@@ -136,6 +136,7 @@ def search():
     for item in data:
         item_name, quantity = item[1], item[3]
         item_totals[item_name] += quantity
+
     # for item_name, total_quantity in item_totals.items():
     #     print(f"物品名: {item_name}, 数量总和: {total_quantity}")
     return render_template('admin/search_Result.html', username=username, results=result, total=total, statistics=tuple(item_totals.items()))
