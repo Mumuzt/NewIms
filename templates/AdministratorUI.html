@@ -2,10 +2,9 @@
 <html>
 <head>
     <title>出入库系统，管理员界面</title>
-    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/mainui.css') }}">
-    <script src= "https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/kucun/mainui.css') }}">
     <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
-    <script src="{{ url_for('static', filename='js/custom.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
+    <script src="{{ url_for('static', filename='js/kucun/custom.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
 </head>
 <body>
 	<div class="navbar-wrapper">
@@ -28,6 +27,7 @@
 			</li>
 		</ul>
 	</div>
+
     <div class="content">
         {% block content %}
 

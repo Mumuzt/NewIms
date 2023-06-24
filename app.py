@@ -32,7 +32,8 @@ def favicon():
 @app.route('/')
 def index():
     # return render_template('login.html')
-    return render_template('AdministratorUI.html')
+    # return render_template('AdministratorUI.html')
+    return render_template('leftNavigation.html')
 
 
 # 点击导航栏呈现出不同的结果
@@ -97,6 +98,10 @@ def get_next_page():
     results = json_data.get('results')
     print(results)
 
+
+@app.route('/inedx_page/<string:page_name>')
+def inedx_page(page_name):
+    return render_template(f'{page_name}.html')
 
 if __name__ == '__main__':
     # app.secret_key = 'your_secret_key'

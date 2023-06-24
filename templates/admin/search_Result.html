@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>搜索结果</title>
     <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
-    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/SearchResult.css') }}">
-    <script src="{{ url_for('static', filename='js/number+o-.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/addItem.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/kucun/SearchResult.css') }}">
+    <script src="{{ url_for('static', filename='js/kucun/number+o-.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/kucun/addItem.js') }}"></script>
 </head>
 <body>
 {% block content_result %}
@@ -48,21 +48,16 @@
             <table>
             <thead>
                 <tr>
-                    <th>  </th>
                     <th>物品名</th>
                     <th>存储处</th>
                     <th>数量</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 {% for result in results %}
                     <tr>
-                        <td>
-{#                            id 用户 物品名#}
-                            <button onclick="delete_Item('{{ result[0] }}','{{username}}','{{ result[1] }}')">
-                                X
-                            </button>
-                        </td>
+
                         <td>{{ result[1] }}</td>
                         <td>{{ result[2] }}</td>
                         <td>
@@ -71,6 +66,12 @@
                             <button onclick="increaseQuantity('{{ result[0] }}', $('.quantity-{{ result[0] }}').val())">+</button>
                             <button onclick="saveInOutNumber('{{ result[0] }}', $('.quantity-{{ result[0] }}').val(), '{{username}}','{{ result[1] }}')">
                                 √
+                            </button>
+
+                        </td>
+                        <td>
+                            <button onclick="delete_Item('{{ result[0] }}','{{username}}','{{ result[1] }}')">
+                                删除
                             </button>
                         </td>
                     </tr>
