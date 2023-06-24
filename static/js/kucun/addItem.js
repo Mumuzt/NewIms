@@ -1,11 +1,11 @@
 
 
 $(document).ready(function() {
-
 // 当点击添加现有物品时，显示隐藏的表单并加载物品名称和存放位置下拉栏
   $('#search_old_Item').click(function() {
     Load_item_name();
   });
+
 
   // 获取添加新物品内表单内容 然后将其发送进物品 数据库
   $("#add_new_Item").submit(function (event) {

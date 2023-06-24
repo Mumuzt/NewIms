@@ -33,14 +33,14 @@ def load_sreach_options():
             cur.close()
             conn.close()
             product_names.insert(0, "全部")
-            return render_template('admin/search.html', options=product_names, search_index=searchIndex, username=user)
+            return render_template('admin/edit_Item.html', options=product_names, search_index=searchIndex, username=user)
         elif searchIndex == 1:
             product_names = [result[2] for result in results]
             product_names = list(set(product_names))
             cur.close()
             conn.close()
             product_names.insert(0, "全部")
-            return render_template('admin/search.html', options=product_names, search_index=searchIndex, username=user)
+            return render_template('admin/edit_Item.html', options=product_names, search_index=searchIndex, username=user)
 
     if operation=="load_sreach_inventory_options":
         print(1)
@@ -139,7 +139,7 @@ def search():
 
     # for item_name, total_quantity in item_totals.items():
     #     print(f"物品名: {item_name}, 数量总和: {total_quantity}")
-    return render_template('admin/search_Result.html', username=username, results=result, total=total, statistics=tuple(item_totals.items()))
+    return render_template('admin/edit_Item_Result.html', username=username, results=result, total=total, statistics=tuple(item_totals.items()))
 
 # 查询盘点
 @search_bp.route('/search_Inventory', methods=['GET'])

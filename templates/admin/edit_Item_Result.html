@@ -7,6 +7,10 @@
 {#    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/kucun/SearchResult.css') }}">#}
     <script src="{{ url_for('static', filename='js/kucun/number+o-.js') }}"></script>
     <script src="{{ url_for('static', filename='js/kucun/addItem.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/kucun/floatWindows.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/kucun/floatCSS.css') }}">
+{#    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css') }}">#}
     <style>
     body {
         font-family: Arial, sans-serif;
@@ -87,38 +91,86 @@
 {% block content_result %}
         <div id="search-results-container">
         <h2>搜索结果</h2>
-        <div>
-            <button onclick="toggleForm1()">添加新物品</button>
-            <div class="item-form111" style="display: none;">
-            <form class="add_new_Item" id="add_new_Item">
-                <input type="text" name="item-name-add" placeholder="物品名">
-                <input type="text" name="storage-location-add" placeholder="存储地">
-                <input type="number" name="quantity-add" placeholder="数量">
-                <button type="submit">提交</button>
-            </form>
+        <!-- 添加新物品模态框 -->
+        <button type="button" class="btn btn-primary" onclick="openModal()">
+          添加新物品
+        </button>
+        {#    添加新物品 浮窗    #}
+        <div id="addNewItemModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">添加新物品</h5>
+              <button class="close" onclick="closeModal()">&times;</button>
             </div>
-        </div>
-        <div>
-            <button id="search_old_Item" type="button">添加现有物品</button>
-            <div class="item-form222" style="display: none;">
-            <form class="add_old_Item" id="add_old_Item">
-                    <select name="item-name">
-                        <!-- 添加选项到下拉菜单中 -->
-                        {% for item_name in item_names %}
-                            <option value="{{ item_name }}">{{ item_name }}</option>
-                        {% endfor %}
-                    </select>
-                    <select name="storage-location">
-                        <!-- 添加选项到下拉菜单中 -->
-                        {% for location in locations %}
-                            <option value="{{ location }}">{{ location }}</option>
-                        {% endfor %}
-                    </select>
-                <input type="number" name="quantity" placeholder="数量">
-                <button type="submit">提交</button>
-            </form>
+            <div class="modal-body">
+              <!-- 添加新物品表单 -->
+
+
+              <form class="add_new_Item" id="add_new_Item">
+                <div class="form-group">
+                  <input type="text" name="item-name-add" class="form-input" placeholder="物品名">
+                </div>
+                <div class="form-group">
+                  <input type="text" name="storage-location-add" class="form-input" placeholder="存储地">
+                </div>
+                <div class="form-group">
+                  <input type="number" name="quantity-add" class="form-input" placeholder="数量">
+                </div>
+                  <div class="form-group">
+                      <button type="submit" class="btn btn-primary">提交</button>
+                  </div>
+              </form>
             </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+            </div>
+          </div>
         </div>
+
+
+        <button type="button" id="search_old_Item" class="btn btn-primary" onclick="openOldItemModal()">
+          添加现有物品
+        </button>
+        {#    添加现有物品 浮窗    #}
+        <div id="addOldItemModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">添加现有物品</h5>
+              <button class="close" onclick="closeOldItemModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <!-- 添加现有物品表单 -->
+              <form class="add_old_Item" id="add_old_Item">
+                <div class="form-group">
+                  <select name="item-name" class="form-select">
+                    <!-- 添加选项到下拉菜单中 -->
+                    {% for item_name in item_names %}
+                      <option value="{{ item_name }}">{{ item_name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <select name="storage-location" class="form-select">
+                    <!-- 添加选项到下拉菜单中 -->
+                    {% for location in locations %}
+                      <option value="{{ location }}">{{ location }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                    <div class="form-group">
+                      <input type="number" name="quantity" class="form-input" placeholder="数量">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" onclick="closeOldItemModal()">取消</button>
+                </div>
+              </div>
+            </div>
+
 
             <table>
             <thead>

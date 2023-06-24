@@ -21,6 +21,7 @@ $(document).ready(function () {
             data: {page_index: pageIndex, user: user},
             success: function (response) {
                 $('.content').html(response.html_content);
+                $('.content_result').html(response.html_result);
             },
             error: function (error) {
                 console.log(error);
