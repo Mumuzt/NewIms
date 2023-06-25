@@ -245,7 +245,6 @@ def search_ioku():
     sql_base = "SELECT * FROM ioRecord WHERE "
     sql_conditions = []
     query_params = []
-
     if year != "全部":
         sql_conditions.append("YEAR(ioTime) = %s")
         query_params.append(year)
@@ -268,13 +267,11 @@ def search_ioku():
     else:
         sql_query = "SELECT * FROM ioRecord"
 
-    print(sql_query)
-    print(query_params)
 
     # 执行 SQL 查询
     cur.execute(sql_query, tuple(query_params))
     results = cur.fetchall()
-
+    print(results)
     # 关闭数据库连接
     cur.close()
     conn.close()

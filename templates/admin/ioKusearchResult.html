@@ -95,6 +95,7 @@
                     <th>操作人</th>
                     <th>操作物</th>
                     <th>操作数量</th>
+                    <th>存储地</th>
                 </tr>
             </thead>
             <div class="search_results">
@@ -107,6 +108,7 @@
                     <td>{{ result[3] }}</td>
                     <td>{{ result[4] }}</td>
                     <td>{{ result[5] }}</td>
+                    <td>{{ result[6] }}</td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -136,6 +138,7 @@ function renderTable(data) {
                         <td>${result[3]}</td>
                         <td>${result[4]}</td>
                         <td>${result[5]}</td>
+                        <td>${result[6]}</td>
                    </tr>`;
 
         tbody.append(row);
