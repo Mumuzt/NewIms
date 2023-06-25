@@ -37,10 +37,10 @@ def save_number_and_log():
     value = request.form.get('value')
     user = request.form.get('user')
     item = request.form.get('item')
-
+    location = request.form.get('location')
     operation = request.form.get('operation')  # 新增一个名为operation的参数来区分不同的操作
 
-    print(item_id, value, user, item,operation)
+    print(item_id, value, user, item,operation,location)
 
     try:
         conn = POOL.connection()
@@ -111,9 +111,10 @@ def save_number_and_log():
         try:
             conn = POOL.connection()
             cur = conn.cursor()
-            insert_query = "INSERT INTO ioLog (io, ioTime, ioUser, ioItem, ioNumber) VALUES (%s, %s, %s, %s, %s)"
+            insert_query = "INSERT INTO ioRecord (io, ioTime, ioUser, ioItem, ioNumber,ioLocation) VALUES (%s, %s, %s, %s, %s,%s)"
             ioTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
-            insert_values = (io, ioTime, user, item, ioNumber)
+            print(io, ioTime, user, item, ioNumber,location)
+            insert_values = (io, ioTime, user, item, ioNumber,location)
             cur.execute(insert_query, insert_values)
             conn.commit()
 

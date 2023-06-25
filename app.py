@@ -81,20 +81,40 @@ def load_page():
         current_month = datetime.now().month
         product_month = [i for i in range(1, 12 + 1)]
         product_month.insert(0, "全部")
+
+
         conn = POOL.connection()
         cur = conn.cursor()
-        cur.execute("SELECT io FROM iolog")
+
+
+        cur.execute("SELECT io FROM ioRecord")
         results = cur.fetchall()
         unique_io = set(result[0] for result in results)
         unique_io = list(unique_io)
         unique_io.insert(0, "全部")
-        cur.execute("SELECT * FROM iolog")
+
+
+        cur.execute("SELECT * FROM ioRecord")
         results_all = cur.fetchall()
+
+        cur.execute("SELECT ProductName FROM inventory")
+        results = cur.fetchall()
+        unique_productName = set(result[0] for result in results)
+        unique_productName = list(unique_productName)
+        unique_productName.insert(0, "全部")
+
+        cur.execute("SELECT Location FROM inventory")
+        results = cur.fetchall()
+        unique_location = set(result[0] for result in results)
+        unique_location = list(unique_location)
+        unique_location.insert(0, "全部")
+
+
         cur.close()
         conn.close()
 
         html_content = render_template('admin/ioku.html', product_year=product_year, product_month=product_month,
-                                       product_whitch=unique_io)
+                                       product_whitch=unique_io,product_Item=unique_productName,product_Location=unique_location)
         html_result = render_template('admin/ioKusearchResult.html', product_year=product_year, product_month=product_month,
                                         product_whitch=unique_io, results=results_all)
     # 盘点

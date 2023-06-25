@@ -234,50 +234,50 @@ def search_ioku():
     year = request.args.get('search_year')
     month = request.args.get('search_month')
     waction = request.args.get('search_waction')
-    print(year, month,waction)
+    productName = request.args.get('search_Item')  # 更改变量名为 productName
+    location = request.args.get('search_Location')
+    print(year, month, waction, productName, location)
+
     conn = POOL.connection()
     cur = conn.cursor()
 
-    if year == "全部":
-    #     搜索全部记录
-        if waction=="全部":
-            cur.execute("SELECT * FROM iolog")
-            results = cur.fetchall()
-        else:
-            sql_query = "SELECT * FROM iolog WHERE io = %s"
-            cur.execute(sql_query, (waction,))
-            results = cur.fetchall()
-    elif month=="全部":
-    #     搜索这个年份全部记录
-        if waction == "全部":
-            sql_query = "SELECT * FROM iolog WHERE YEAR(ioTime) = %s"
-            cur.execute(sql_query, (year,))
-            results = cur.fetchall()
-        else:
-            sql_query = "SELECT * FROM iolog WHERE YEAR(ioTime) = %s AND io = %s"
-            cur.execute(sql_query, (year, waction))
-            results = cur.fetchall()
+    # 动态构建 SQL 查询
+    sql_base = "SELECT * FROM ioRecord WHERE "
+    sql_conditions = []
+    query_params = []
+
+    if year != "全部":
+        sql_conditions.append("YEAR(ioTime) = %s")
+        query_params.append(year)
+    if month != "全部":
+        sql_conditions.append("MONTH(ioTime) = %s")
+        query_params.append(month)
+    if waction != "全部":
+        sql_conditions.append("io = %s")
+        query_params.append(waction)
+
+    if productName!= "全部":
+        sql_conditions.append("ioItem = %s")
+        query_params.append(productName)
+    if location!= "全部":
+        sql_conditions.append("iolocation = %s")
+        query_params.append(location)
+
+    if sql_conditions:  # 如果有条件，则添加 WHERE 子句
+        sql_query = sql_base + " AND ".join(sql_conditions)
     else:
-        # 搜索这年这月的记录
-        if waction == "全部":
-            sql_query = "SELECT * FROM iolog WHERE YEAR(ioTime) = %s AND MONTH(ioTime) = %s"
-            cur.execute(sql_query, (year, month))
-            results = cur.fetchall()
-        else:
-            sql_query = "SELECT * FROM iolog WHERE YEAR(ioTime) = %s AND MONTH(ioTime) = %s AND io = %s"
-            cur.execute(sql_query, (year, month, waction))
-            results = cur.fetchall()
+        sql_query = "SELECT * FROM ioRecord"
+
+    print(sql_query)
+    print(query_params)
+
+    # 执行 SQL 查询
+    cur.execute(sql_query, tuple(query_params))
+    results = cur.fetchall()
+
     # 关闭数据库连接
     cur.close()
     conn.close()
     results = results[::-1]
-
-
-    # # 分页
-    # page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
-    # print(page,per_page,offset)
-    # total = len(results)
-    # pagination_results = results[offset: offset + per_page]
-    # pagination = Pagination(page=page, per_page=per_page, total=total)
 
     return render_template('admin/ioKusearchResult.html', results=results)

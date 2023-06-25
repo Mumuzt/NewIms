@@ -60,11 +60,11 @@ function deleteItem(itemId, username, item) {
 }
 
 // 保存数量通用函数
-function saveNumber(itemId, value, username, item, operation) {
+function saveNumber(itemId, value, username, item,location, operation) {
     $.ajax({
         url: '/save_number_and_log',
         type: 'POST',
-        data: { id: itemId, value, user: username, item, operation },
+        data: { id: itemId, value, user: username, item, location,operation },
         success: () => {
             console.log('Number saved successfully.');
             alert("修改成功");
@@ -75,8 +75,8 @@ function saveNumber(itemId, value, username, item, operation) {
 }
 
 // 保存出入库数量
-function saveInOutNumber(itemId, value, username, item) {
-    saveNumber(itemId, value, username, item, "save_number");
+function saveInOutNumber(itemId, value, username, item,location) {
+    saveNumber(itemId, value, username, item, location,"save_number");
 }
 
 // 保存盘点数量
