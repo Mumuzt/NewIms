@@ -56,28 +56,40 @@ def load_page():
         results = cur.fetchall()
         print(results)
         cur.close()
-        #
-        #
-        # total = sum(result1[3] for result1 in results)
-        # print(total)
-        # data = results
-        # item_totals = defaultdict(int)
-        # for item in data:
-        #     item_name, quantity = item[1], item[3]
-        #     item_totals[item_name] += quantity
-        # cur.close()
+
         html_content = ""
         html_result = render_template('admin/home.html', results=results)
-        # , total = total, statistics = tuple(item_totals.items())
 
-    # 物品出入库
+    # 物品出入库 可以 增删改查
     elif page_index == 1:
         conn = POOL.connection()
         cur = conn.cursor()
+
+        # 搜索全部的物品 展示到content_result 中
         cur.execute("SELECT * FROM inventory")
         results = cur.fetchall()
+
+        # 搜索全部的物品
+        cur.execute("SELECT * FROM inventory ")
+        results_Item_Name = cur.fetchall()
+        product_names = [result[1] for result in results_Item_Name]
+        product_names = list(set(product_names))
+        product_names.insert(0, "全部")
+        # product_names就是物品名 列表
+        # 搜索全部的Location
+        location_names = [result[2] for result in results_Item_Name]
+        location_names = list(set(location_names))
+        location_names.insert(0, "全部")
+        print("搜索结果：",results)
+        print("搜索物品名：", product_names)
+        print("搜索存储地：", location_names)
         cur.close()
-        html_content = render_template('admin/edit_Item.html', username=user,results=results)
+
+
+
+
+        html_content = render_template('admin/edit_Item.html', username=user,product_names=product_names,location_names=location_names)
+
         html_result = render_template('admin/edit_Item_Result.html', username=user,results=results)
 
     # 出入库记录

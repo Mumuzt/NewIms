@@ -77,6 +77,9 @@ def load_sreach_options():
             cur.close()
             product_names.insert(0, "全部")
             return render_template('admin/search_damage.html', options=product_names, search_index=searchIndex, username=user)
+
+
+
 @search_bp.route('/search_old_Item', methods=['GET'])
 def search_old_Item():
     # 连接数据库
@@ -99,47 +102,52 @@ def search_old_Item():
     return jsonify(result)
 #普通查询
 # 根据搜索限制（物品名/存储地）搜索相应的结果
-@search_bp.route('/search', methods=['GET'])
+@search_bp.route('/search', methods=['POST'])
 def search():
-    result_value = request.args.get('result')
-    query = request.args.get('query')
-    username = request.args.get('username')
+    data = request.get_json()
+    print(data)
+    selected_products = data['selected_products']
+    print(selected_products)
+    # 处理选中的产品
 
     conn = POOL.connection()
     cur = conn.cursor()
-    if query==None:
-        cur.execute("SELECT * FROM inventory")
-
-    # 执行查询
-    if result_value == "0":
-        if query=="全部":
-            cur.execute("SELECT * FROM inventory")
-        else:
-            cur.execute("SELECT * FROM inventory WHERE ProductName LIKE '%{}%'".format(query))
-    elif result_value == "1":
-        if query=="全部":
-            cur.execute("SELECT * FROM inventory")
-        else:
-            cur.execute("SELECT * FROM inventory WHERE Location LIKE '%{}%'".format(query))
+    query = "SELECT * FROM inventory WHERE ProductName IN (%s) ORDER BY ProductName ASC" % ', '.join(['%s'] * len(selected_products))
+    cur.execute(query, selected_products)
     result = cur.fetchall()
+    print(result)
+    # if query==None:
+    #     cur.execute("SELECT * FROM inventory")
+    #
+    # # 执行查询
+    # if result_value == "0":
+    #     if query=="全部":
+    #         cur.execute("SELECT * FROM inventory")
+    #     else:
+    #         cur.execute("SELECT * FROM inventory WHERE ProductName LIKE '%{}%'".format(query))
+    # elif result_value == "1":
+    #     if query=="全部":
+    #         cur.execute("SELECT * FROM inventory")
+    #     else:
+    #         cur.execute("SELECT * FROM inventory WHERE Location LIKE '%{}%'".format(query))
+
 
     # 关闭数据库连接
     cur.close()
     conn.close()
 
-    print(result)
-
-    total = sum(result1[3] for result1 in result)
-    print(total)
-    data = result
-    item_totals = defaultdict(int)
-    for item in data:
-        item_name, quantity = item[1], item[3]
-        item_totals[item_name] += quantity
-
-    # for item_name, total_quantity in item_totals.items():
-    #     print(f"物品名: {item_name}, 数量总和: {total_quantity}")
-    return render_template('admin/edit_Item_Result.html', username=username, results=result, total=total, statistics=tuple(item_totals.items()))
+    print("搜索结果：",result)
+    #
+    # total = sum(result1[3] for result1 in result)
+    # print("总和：",total)
+    # data = result
+    # item_totals = defaultdict(int)
+    # for item in data:
+    #     item_name, quantity = item[1], item[3]
+    #     item_totals[item_name] += quantity
+    finall = render_template('admin/edit_Item_Result.html', results=result)
+    # print(finall)
+    return jsonify(finall)
 
 # 查询盘点
 @search_bp.route('/search_Inventory', methods=['GET'])

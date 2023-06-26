@@ -13,30 +13,21 @@
         <h2>物品出入库</h2>
         <div class="request_form">
             <div class="mb-3">
-                <label for="searchOption" class="form-label">筛选类型</label>
-                <div class="but_s_o1">
-                    <button type="button" class="btn btn-primary mr-2" data-search-option="0" data-user="{{ username }}">按物品名筛选</button>
-                    <button type="button" class="btn btn-primary" data-search-option="1" data-user="{{ username }}">按存储处筛选</button>
+                <label for="product_names" class="form-label">物品名</label>
+                <div id="productNamesContainer">
+                    {% for product_name in product_names %}
+                    <button type="submit" class="btn btn-secondary mr-2 mb-2" data-product-name="{{ product_name }}">{{ product_name }}</button>
+                    {% endfor %}
                 </div>
             </div>
-            <form action="/search" method="GET" id="search_form">
-                <input type="hidden" name="username" value="{{username}}">
-                <div class="mb-3">
-                    <label for="query" class="form-label">筛选条件</label>
-                    <select class="form-select" name="query" id="query">
-                        {% for option in options %}
-                        <option value="{{ option }}">{{ option }}</option>
-                        {% endfor %}
-                    </select>
+            <div class="mb-3">
+                <label for="location_names" class="form-label">存储地点</label>
+                <div id="locationNamesContainer">
+                    {% for location_name in location_names %}
+                    <button type="submit" class="btn btn-secondary mr-2 mb-2" data-location-name="{{ location_name }}">{{ location_name }}</button>
+                    {% endfor %}
                 </div>
-                <div class="mb-3">
-                    <label for="resultInput" class="form-label"></label>
-                    <input type="text" class="form-control" id="resultInput" name="result" value={{search_index}}>
-                </div>
-                <div class="mb-3">
-                    <input type="submit" class="btn btn-primary" value="搜索">
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 {% endblock %}

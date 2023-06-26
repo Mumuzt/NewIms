@@ -1,5 +1,23 @@
 $(document).ready(function() {
-  attachSubmitHandler('#search_form', '/search');
+  $('#productNamesContainer button').on('click', function() {
+        const productName = $(this).data('product-name');
+        $(this).toggleClass('btn-custom-selected');
+        // Perform an action with the product name, e.g., make an AJAX request or update the UI
+    });
+
+  // Handle location name button click
+    $('#locationNamesContainer button').on('click', function() {
+        const locationName = $(this).data('location-name');
+        $(this).toggleClass('btn-custom-selected');
+        // Perform an action with the location name, e.g., make an AJAX request or update the UI
+    });
+
+  attachSubmitHandler('#productNamesContainer', '/search', 'data-product-name');
+
+
+
+
+
   attachSubmitHandler('#search_Inventory_form', '/search_Inventory');
   attachSubmitHandler('#search_damage_form', '/search_damage');
 
@@ -7,8 +25,7 @@ $(document).ready(function() {
   attachButtonClickHandler('.but_s_o2 button', 'load_sreach_inventory_options');
   attachButtonClickHandler('.but_s_o3 button', 'load_sreach_damage_options');
 });
-function show1()
-{
+function show1() {
   $.ajax({
     url: '/search_Location',
     type: 'GET',
@@ -97,25 +114,38 @@ function show3(){
   })
 
 }
-function attachSubmitHandler(formSelector, url) {
-  $(formSelector).submit(function(event) {
-    event.preventDefault();
-    var formData = $(this).serialize();
 
+
+function attachSubmitHandler(containerSelector, url, word) {
+  $(containerSelector).on('click', '.btn-custom-selected', function () {
+    let selectedProducts = getSelectedProducts(word);
     $.ajax({
       url: url,
-      method: 'GET',
-      data: formData,
-      success: function(response) {
-        $('#content_result').html(response);
-        saveLastRequest(url, 'GET', formData);
+      method: 'POST',
+      contentType: 'application/json;charset=UTF-8',
+      data: JSON.stringify({ selected_products: selectedProducts }),
+      success: function (response) {
+        // 清理上一次的搜索结果
+        $('.content_result').html(response);
+        saveLastRequest(url, 'GET', searchTerm);
       },
-      error: function(error) {
+      error: function (error) {
         console.log(error);
       }
     });
   });
 }
+function getSelectedProducts(attributeName) {
+  let selectedProducts = [];
+  let buttons = $('.btn-custom-selected');
+
+  buttons.each(function() {
+    selectedProducts.push($(this).attr(attributeName));
+  });
+
+  return selectedProducts;
+}
+
 
 function attachButtonClickHandler(buttonSelector, operation) {
   $(buttonSelector).click(function(event) {
