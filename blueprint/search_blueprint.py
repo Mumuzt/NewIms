@@ -278,3 +278,14 @@ def search_ioku():
     results = results[::-1]
 
     return render_template('admin/ioKusearchResult.html', results=results)
+
+@search_bp.route('/search_Location', methods=['GET', 'POST'])
+def search_Location():
+    # 拿的data里的值
+    search_options = request.args.get('options')
+    conn = POOL.connection()
+    cur = conn.cursor()
+    # 根据search_options的值 查询数据库
+    cur.execute("select * from inventory where Location = %s", search_options)
+    results = cur.fetchall()
+    return jsonify(results)

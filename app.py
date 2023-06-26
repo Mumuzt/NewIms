@@ -6,7 +6,6 @@ from datetime import datetime
 from sqlPool import POOL
 from collections import defaultdict
 
-
 from blueprint.search_blueprint import search_bp
 from blueprint.update_blueprint import update_bp
 from blueprint.user_blueprint import userUser_bp
@@ -49,19 +48,27 @@ def load_page():
         # 连接数据库
         conn = POOL.connection()
         cur = conn.cursor()
-        cur.execute("SELECT * FROM inventory")
+        cur.execute("""
+            SELECT ProductName, GROUP_CONCAT(Location) as locations, SUM(number) as total_quantity
+            FROM inventory
+            GROUP BY ProductName;
+        """)
         results = cur.fetchall()
-
-        total = sum(result1[3] for result1 in results)
-        print(total)
-        data = results
-        item_totals = defaultdict(int)
-        for item in data:
-            item_name, quantity = item[1], item[3]
-            item_totals[item_name] += quantity
+        print(results)
         cur.close()
+        #
+        #
+        # total = sum(result1[3] for result1 in results)
+        # print(total)
+        # data = results
+        # item_totals = defaultdict(int)
+        # for item in data:
+        #     item_name, quantity = item[1], item[3]
+        #     item_totals[item_name] += quantity
+        # cur.close()
         html_content = ""
-        html_result = render_template('admin/home.html', results=results, total=total, statistics=tuple(item_totals.items()))
+        html_result = render_template('admin/home.html', results=results)
+        # , total = total, statistics = tuple(item_totals.items())
 
     # 物品出入库
     elif page_index == 1:
