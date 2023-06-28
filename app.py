@@ -33,8 +33,8 @@ def favicon():
 @app.route('/')
 def index():
     # return render_template('login.html')
-    # return render_template('AdministratorUI.html')
-    return render_template('leftNavigation.html')
+    return render_template('AdministratorUI.html')
+    # return render_template('leftNavigation.html')
 
 
 # 点击导航栏呈现出不同的结果

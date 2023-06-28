@@ -160,12 +160,53 @@
         #resultInput {
             display: none;
         }
+         .title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            color: #108513;
+            animation: colorchange 4s infinite; /* 应用颜色变化动画 */
+        }
 
+        /* 定义颜色变化动画 */
+        @keyframes colorchange {
+            0% { color: #108513; }
+            25% { color: #45a049; }
+            50% { color: #72b167; }
+            75% { color: #45a049; }
+            100% { color: #108513; }
+        }
+        .image-container {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .image-container img {
+            width: 100vw;
+            height: auto;
+        }
     </style>
     <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
     <script src="{{ url_for('static', filename='js/kucun/custom.js') }}"></script> <!-- 引入外部的 JavaScript 文件 -->
+    <script>
+    $(document).ready(function() {
+        // 触发'库存展示'按钮的点击事件
+        $('a[data-page-index="0"]').click();
+
+        // 现有的代码...
+    });
+</script>
 </head>
 <body>
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='images/title.webp') }}" alt="图片描述">
+    </div>
+    <div class="title">
+        北京中心运维管理系统
+    </div>
 	<div class="navbar-wrapper">
 		<ul class="navbar">
 			<li><a href="#" data-page-index="0" data-user = {{username}}>库存展示</a></li>
