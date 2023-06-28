@@ -128,10 +128,8 @@ def load_page():
         cur.close()
         conn.close()
 
-        html_content = render_template('admin/ioku.html', product_year=product_year, product_month=product_month,
-                                       product_whitch=unique_io,product_Item=unique_productName,product_Location=unique_location)
-        html_result = render_template('admin/ioKusearchResult.html', product_year=product_year, product_month=product_month,
-                                        product_whitch=unique_io, results=results_all)
+        html_content = render_template('admin/ioku.html', product_year=product_year, product_month=product_month,product_whitch=unique_io,product_Item=unique_productName,product_Location=unique_location)
+        html_result = render_template('admin/ioKusearchResult.html', product_year=product_year, product_month=product_month,product_whitch=unique_io, results=results_all)
     # 盘点
     elif page_index == 3:
         conn = POOL.connection()
@@ -207,8 +205,6 @@ def get_next_page():
     # 从JSON数据中获取results的值
     results = json_data.get('results')
     print(results)
-
-
 @app.route('/inedx_page/<string:page_name>')
 def inedx_page(page_name):
     username = request.args.get('username')

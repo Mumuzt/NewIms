@@ -15,11 +15,17 @@
 <body>
 {% block content_result %}
         <div id="search-results-container">
+            <div class="button-container">
+                <button type="button" class="btn btn-primary" onclick="openModal()">
+                    添加新物品
+                </button>
+                <button type="button" id="search_old_Item" class="btn btn-primary" onclick="openOldItemModal()">
+                    添加现有物品
+                </button>
+            </div>
         <h2>搜索结果</h2>
         <!-- 添加新物品模态框 -->
-        <button type="button" class="btn btn-primary" onclick="openModal()">
-          添加新物品
-        </button>
+
         {#    添加新物品 浮窗    #}
         <div id="addNewItemModal" class="modal">
           <div class="modal-content">
@@ -53,9 +59,7 @@
         </div>
 
 
-        <button type="button" id="search_old_Item" class="btn btn-primary" onclick="openOldItemModal()">
-          添加现有物品
-        </button>
+
         {#    添加现有物品 浮窗    #}
         <div id="addOldItemModal" class="modal">
           <div class="modal-content">
@@ -119,7 +123,6 @@
                             <button onclick="saveInOutNumber('{{ result[0] }}', $('.quantity-{{ result[0] }}').val(), '{{username}}','{{ result[1] }}','{{ result[2] }}')">
                                 √
                             </button>
-
                         </td>
                         <td>
                             <button onclick="delete_Item('{{ result[0] }}','{{username}}','{{ result[1] }}')">
@@ -128,30 +131,8 @@
                         </td>
                     </tr>
                 {% endfor %}
-                <tr>
-                    <td colspan="3">合计</td>
-                    <td>{{ total }}</td>
-                </tr>
             </tbody>
         </table>
-        <h2>统计</h2>
-        <table>
-                <thead>
-                    <tr>
-                        <th>物品名</th>
-                        <th>数量</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for statistic in statistics %}
-                        <tr>
-                            <td>{{ statistic[0] }}</td>
-                            <td>{{ statistic[1] }}</td>
-
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
     </div>
 {% endblock %}
 </body>

@@ -47,31 +47,8 @@
                         </td>
                     </tr>
                 {% endfor %}
-                <tr>
-                    <td colspan="3">合计</td>
-                    <td>{{ total }}</td>
-                </tr>
             </tbody>
         </table>
-        <h2>统计</h2>
-        <table>
-                <thead>
-                    <tr>
-                        <th>物品名</th>
-                        <th>数量</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for statistic in statistics %}
-                        <tr>
-                            <td>{{ statistic[0] }}</td>
-                            <td>{{ statistic[1] }}</td>
-
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
     </div>
 {% endblock %}
 </body>

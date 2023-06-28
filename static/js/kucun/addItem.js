@@ -48,27 +48,25 @@ function saveLastRequest(url, method, params) {
 }
 // 载入
 function callLastRequest() {
-  var lastRequest = sessionStorage.getItem('lastRequest');
-  if (lastRequest) {
-    var request = JSON.parse(lastRequest);
-    $.ajax({
-      url: request.url,
-      method: request.method,
-      data: request.params,
-      success: function (response) {
-        // 在成功回调中处理响应结果
-        $('.content_result').html(response);
-      },
-      error: function (error) {
-        console.log('Ajax request error:', error);
-      }
-    });
-  }
+    const lastRequest = sessionStorage.getItem('lastRequest');
+    console.log('lastRequest:', lastRequest); // 输出lastRequest的内容
+    if (lastRequest) {
+        const request = JSON.parse(lastRequest);
+        console.log('request:', request); // 输出request的内容
+
+        $.ajax({
+            url: request.url,
+            type: request.method,
+            data: request.params, // 直接使用request.params作为请求数据
+            success: response => {
+                $('.content').html(response.html_content);
+                $('.content_result').html(response.html_result);
+            },
+            error: error => console.log('Ajax request error:', error)
+        });
+    }
 }
 // 显示隐藏的表单
-function toggleForm1() {
-  $(".item-form111").toggle();
-}
 function Load_item_name() {
     $.ajax({
       url: '/search_old_Item', // 替换为实际的后台接口URL
@@ -104,15 +102,14 @@ function add_new_Item(formData){
       success: function (response) {
         // 请求成功时的处理代码
         console.log(response); // 在控制台打印服务器的响应
-        alert("添加物品成功:", response)
         callLastRequest();
         // 可以根据需要进行其他操作
       },
       error: function (error) {
         // 请求失败时的处理代码
         console.log(error); // 在控制台打印错误信息
-        alert("添加物品失败:", error)
         // 可以根据需要进行其他操作
+        callLastRequest();
       }
     });
 
@@ -125,12 +122,12 @@ function add_old_Item(formData){
       success: function(response) {
         // 请求成功时的处理代码
         console.log(response); // 在控制台打印服务器的响应
-        alert("添加物品成功:", response)
         callLastRequest();
       },
       error: function(error) {
         // 请求失败时的处理代码
         console.log(error);
+        callLastRequest();
       }
     });
 }
