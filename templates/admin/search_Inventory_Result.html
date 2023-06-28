@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/kucun/SearchResult.css') }}">
     <script src="{{ url_for('static', filename='js/kucun/number+o-.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/kucun/content_resultCSS.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/kucun/floatCSS.css') }}">
 
 </head>
 <body>
@@ -32,7 +33,7 @@
                             <button onclick="decreaseQuantity('{{ result[0] }}', $('.quantity-{{ result[0] }}').val())">-</button>
                             <input type="number" class="quantity-{{ result[0] }}" value="{{ result[3] }}" onchange="updateQuantity('{{ result[0] }}', this)">
                             <button onclick="increaseQuantity('{{ result[0] }}', $('.quantity-{{ result[0] }}').val())">+</button>
-                            <button onclick="saveInventoryNumber('{{ result[0] }}', $('.quantity-{{ result[0] }}').val(), '{{username}}','{{ result[1] }}')">
+                            <button onclick="saveInventoryNumber('{{ result[0] }}', $('.quantity-{{ result[0] }}').val(), '{{username}}','{{ result[1] }}','{{ result[2] }}')">
                                 √
                             </button>
                         </td>

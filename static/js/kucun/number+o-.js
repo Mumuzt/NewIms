@@ -7,7 +7,7 @@ const cancel_DamageNumber = cancelDamageNumber;
 
 
 
-// 保存
+// 保存上次请求
 function saveLastRequest(url, method, params) {
     const request = {
         url,
@@ -17,13 +17,22 @@ function saveLastRequest(url, method, params) {
     sessionStorage.setItem('lastRequest', JSON.stringify(request));
 }
 
-// 载入
+// 载入上次请求
 function callLastRequest() {
     const lastRequest = sessionStorage.getItem('lastRequest');
+    console.log('lastRequest:', lastRequest); // 输出lastRequest的内容
     if (lastRequest) {
         const request = JSON.parse(lastRequest);
+        console.log('request:', request); // 输出request的内容
+
+        // 将params从字符串转换为对象
+        const requestData = JSON.parse(request.params);
+
         $.ajax({
-            ...request,
+            url: request.url,
+            type: request.method,
+            data: JSON.stringify(requestData), // 将请求数据转换为JSON字符串
+            contentType: 'application/json', // 设置内容类型为 application/json
             success: response => $('.content_result').html(response),
             error: error => console.log('Ajax request error:', error)
         });
@@ -60,33 +69,42 @@ function deleteItem(itemId, username, item) {
 }
 
 // 保存数量通用函数
-function saveNumber(itemId, value, username, item,location, operation) {
-    $.ajax({
+function saveNumber(itemId, value, username, item, location, operation) {
+    const result = confirm("您确定要修改吗？");
+    if (result) {
+            $.ajax({
         url: '/save_number_and_log',
         type: 'POST',
-        data: { id: itemId, value, user: username, item, location,operation },
+        data: { id: itemId,
+            value:value,
+            username: username,
+            item:item,
+            location:location,
+            operation:operation },
+
         success: () => {
             console.log('Number saved successfully.');
-            alert("修改成功");
             callLastRequest();
         },
-        error: error => console.log('Ajax request error:', error)
-    });
+            error: error => console.log('Ajax request error:', error)
+        });
+    }
+
 }
 
 // 保存出入库数量
-function saveInOutNumber(itemId, value, username, item,location) {
+function saveInOutNumber(itemId, value, username, item, location) {
     saveNumber(itemId, value, username, item, location,"save_number");
 }
 
 // 保存盘点数量
-function saveInventoryNumber(itemId, value, username, item) {
-    saveNumber(itemId, value, username, item, "save_Inventory_number");
+function saveInventoryNumber(itemId, value, username, item, location) {
+    saveNumber(itemId, value, username, item, location,"save_Inventory_number");
 }
 
 // 保存报废数量
-function saveDamageNumber(itemId, value, username, item) {
-    saveNumber(itemId, value, username, item, "save_Damage_Number");
+function saveDamageNumber(itemId, value, username, item, location) {
+    saveNumber(itemId, value, username, item, location,"save_Damage_Number");
 }
 
 // 保存注销数量

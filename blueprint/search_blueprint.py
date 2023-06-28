@@ -106,136 +106,149 @@ def search_old_Item():
 def search():
     data = request.get_json()
     print(data)
-    selected_products = data['selected_products']
-    print(selected_products)
+    # 接收产品和位置数据
+    selected_products = data.get('data-product-name', [])
+    selected_locations = data.get('data-location-name', [])
     # 处理选中的产品
-
     conn = POOL.connection()
     cur = conn.cursor()
-    query = "SELECT * FROM inventory WHERE ProductName IN (%s) ORDER BY ProductName ASC" % ', '.join(['%s'] * len(selected_products))
-    cur.execute(query, selected_products)
-    result = cur.fetchall()
-    print(result)
-    # if query==None:
-    #     cur.execute("SELECT * FROM inventory")
-    #
-    # # 执行查询
-    # if result_value == "0":
-    #     if query=="全部":
-    #         cur.execute("SELECT * FROM inventory")
-    #     else:
-    #         cur.execute("SELECT * FROM inventory WHERE ProductName LIKE '%{}%'".format(query))
-    # elif result_value == "1":
-    #     if query=="全部":
-    #         cur.execute("SELECT * FROM inventory")
-    #     else:
-    #         cur.execute("SELECT * FROM inventory WHERE Location LIKE '%{}%'".format(query))
 
+    # 构建查询
+    query = "SELECT * FROM inventory"
+
+    # 查询条件列表
+    conditions = []
+
+    # 如果选中的产品不为"全部"，则添加产品条件
+    if selected_products and selected_products[0] != "全部":
+        conditions.append("ProductName IN ({})".format(', '.join(['%s'] * len(selected_products))))
+
+    # 如果选中的位置不为"全部"，则添加位置条件
+    if selected_locations and selected_locations[0] != "全部":
+        conditions.append("Location IN ({})".format(', '.join(['%s'] * len(selected_locations))))
+
+    # 如果有条件，将它们添加到查询中
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+
+    query += " ORDER BY ProductName ASC"
+
+    print(query)
+
+    # 移除"全部"选项，避免传递给数据库查询
+    selected_products = [product for product in selected_products if product != "全部"]
+    selected_locations = [location for location in selected_locations if location != "全部"]
+
+    # 执行查询
+    cur.execute(query, selected_products + selected_locations)
+    result = cur.fetchall()
 
     # 关闭数据库连接
     cur.close()
     conn.close()
 
-    print("搜索结果：",result)
-    #
-    # total = sum(result1[3] for result1 in result)
-    # print("总和：",total)
-    # data = result
-    # item_totals = defaultdict(int)
-    # for item in data:
-    #     item_name, quantity = item[1], item[3]
-    #     item_totals[item_name] += quantity
+    print("搜索结果：", result)
     finall = render_template('admin/edit_Item_Result.html', results=result)
-    # print(finall)
     return jsonify(finall)
 
 # 查询盘点
-@search_bp.route('/search_Inventory', methods=['GET'])
+@search_bp.route('/search_Inventory', methods=['POST'])
 def search_Inventory():
-    result_value = request.args.get('result')
-    query = request.args.get('query')
-    username = request.args.get('username')
-
+    data = request.get_json()
+    print(data)
+    # 接收产品和位置数据
+    selected_products = data.get('data-product-name', [])
+    selected_locations = data.get('data-location-name', [])
+    # 处理选中的产品
     conn = POOL.connection()
     cur = conn.cursor()
 
+    # 构建查询
+    query = "SELECT * FROM inventory"
 
-    if query==None:
-        cur.execute("SELECT * FROM inventory")
+    # 查询条件列表
+    conditions = []
+
+    # 如果选中的产品不为"全部"，则添加产品条件
+    if selected_products and selected_products[0] != "全部":
+        conditions.append("ProductName IN ({})".format(', '.join(['%s'] * len(selected_products))))
+
+    # 如果选中的位置不为"全部"，则添加位置条件
+    if selected_locations and selected_locations[0] != "全部":
+        conditions.append("Location IN ({})".format(', '.join(['%s'] * len(selected_locations))))
+
+    # 如果有条件，将它们添加到查询中
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+
+    query += " ORDER BY ProductName ASC"
+
+    print(query)
+
+    # 移除"全部"选项，避免传递给数据库查询
+    selected_products = [product for product in selected_products if product != "全部"]
+    selected_locations = [location for location in selected_locations if location != "全部"]
 
     # 执行查询
-    if result_value == "0":
-        if query=="全部":
-            cur.execute("SELECT * FROM inventory")
-        else:
-            cur.execute("SELECT * FROM inventory WHERE ProductName LIKE '%{}%'".format(query))
-    elif result_value == "1":
-        if query=="全部":
-            cur.execute("SELECT * FROM inventory")
-        else:
-            cur.execute("SELECT * FROM inventory WHERE Location LIKE '%{}%'".format(query))
-
-
+    cur.execute(query, selected_products + selected_locations)
     result = cur.fetchall()
 
     # 关闭数据库连接
     cur.close()
     conn.close()
-    print(result)
 
-    total = sum(result1[3] for result1 in result)
-    print(total)
-    data = result
-    item_totals = defaultdict(int)
-    for item in data:
-        item_name, quantity = item[1], item[3]
-        item_totals[item_name] += quantity
-    # for item_name, total_quantity in item_totals.items():
-    #     print(f"物品名: {item_name}, 数量总和: {total_quantity}")
-
-    return render_template('admin/search_Inventory_Result.html', username=username, results=result, total=total, statistics=tuple(item_totals.items()))
-
+    print("搜索结果：", result)
+    finall = render_template('admin/search_Inventory_Result.html', results=result)
+    return jsonify(finall)
 #查询报废
-@search_bp.route('/search_damage', methods=['GET'])
+@search_bp.route('/search_damage', methods=['POST'])
 def search_damage():
-    result_value = request.args.get('result')
-    query = request.args.get('query')
-    username = request.args.get('username')
-    print(result_value,query,username)
-    try:
-        conn = POOL.connection()
-        cur = conn.cursor()
-        if query == None:
-            cur.execute("SELECT * FROM inventory")
-        if result_value == "0":
-            if query == "全部":
-                cur.execute("SELECT * FROM inventory")
-            else:
-                cur.execute("SELECT * FROM inventory WHERE ProductName LIKE '%{}%'".format(query))
-        elif result_value == "1":
-            if query == "全部":
-                cur.execute("SELECT * FROM inventory")
-            else:
-                cur.execute("SELECT * FROM inventory WHERE Location LIKE '%{}%'".format(query))
-        result = cur.fetchall()
-        cur.close()
-        conn.close()
-        response = "success"
-    except Exception as e:
-        print('Error:', e)
-        response = str(e)
-    print(result)
+    data = request.get_json()
+    print(data)
+    # 接收产品和位置数据
+    selected_products = data.get('data-product-name', [])
+    selected_locations = data.get('data-location-name', [])
+    # 处理选中的产品
+    conn = POOL.connection()
+    cur = conn.cursor()
 
-    total = sum(result1[3] for result1 in result)
-    print(total)
-    data = result
-    item_totals = defaultdict(int)
-    for item in data:
-        item_name, quantity = item[1], item[3]
-        item_totals[item_name] += quantity
+    # 构建查询
+    query = "SELECT * FROM inventory"
 
-    return render_template('admin/search_damage_Result.html', username=username, results=result, total=total, statistics=tuple(item_totals.items()))
+    # 查询条件列表
+    conditions = []
 
+    # 如果选中的产品不为"全部"，则添加产品条件
+    if selected_products and selected_products[0] != "全部":
+        conditions.append("ProductName IN ({})".format(', '.join(['%s'] * len(selected_products))))
+
+    # 如果选中的位置不为"全部"，则添加位置条件
+    if selected_locations and selected_locations[0] != "全部":
+        conditions.append("Location IN ({})".format(', '.join(['%s'] * len(selected_locations))))
+
+    # 如果有条件，将它们添加到查询中
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+
+    query += " ORDER BY ProductName ASC"
+
+    print(query)
+
+    # 移除"全部"选项，避免传递给数据库查询
+    selected_products = [product for product in selected_products if product != "全部"]
+    selected_locations = [location for location in selected_locations if location != "全部"]
+
+    # 执行查询
+    cur.execute(query, selected_products + selected_locations)
+    result = cur.fetchall()
+
+    # 关闭数据库连接
+    cur.close()
+    conn.close()
+
+    print("搜索结果：", result)
+    finall = render_template('admin/search_damage_Result.html', results=result)
+    return jsonify(finall)
 #查询盘点
 @search_bp.route('/search_ioku', methods=['GET'])
 def search_ioku():

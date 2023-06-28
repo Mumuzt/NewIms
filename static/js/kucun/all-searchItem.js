@@ -1,29 +1,31 @@
-$(document).ready(function() {
-  $('#productNamesContainer button').on('click', function() {
-        const productName = $(this).data('product-name');
-        $(this).toggleClass('btn-custom-selected');
-        // Perform an action with the product name, e.g., make an AJAX request or update the UI
-    });
-
-  // Handle location name button click
-    $('#locationNamesContainer button').on('click', function() {
-        const locationName = $(this).data('location-name');
-        $(this).toggleClass('btn-custom-selected');
-        // Perform an action with the location name, e.g., make an AJAX request or update the UI
-    });
-
-  attachSubmitHandler('#productNamesContainer', '/search', 'data-product-name');
 
 
 
+$(document).ready(function () {
+  // 当点击任何按钮时
+  $('.btn-secondary').on('click', function () {
+    // 如果点击的是“全部”按钮
+    if ($(this).attr('data-product-name') === '全部' || $(this).attr('data-location-name') === '全部') {
+      // 取消其他按钮的选中状态
+      $(this).siblings().removeClass('btn-custom-selected');
+      // 选中全部按钮
+      $(this).addClass('btn-custom-selected');
+    } else {
+      // 如果当前按钮已经选中，那么取消选中，否则选中当前按钮
+      $(this).toggleClass('btn-custom-selected');
+      // 取消全部按钮的选中状态
+      $(this).siblings('[data-product-name="全部"], [data-location-name="全部"]').removeClass('btn-custom-selected');
+    }
 
-
-  attachSubmitHandler('#search_Inventory_form', '/search_Inventory');
-  attachSubmitHandler('#search_damage_form', '/search_damage');
-
-  attachButtonClickHandler('.but_s_o1 button', 'load_sreach_options');
-  attachButtonClickHandler('.but_s_o2 button', 'load_sreach_inventory_options');
-  attachButtonClickHandler('.but_s_o3 button', 'load_sreach_damage_options');
+    // 根据按钮的父容器调用相应的搜索函数
+    if ($(this).parents('#productNamesContainer, #locationNamesContainer').length) {
+      performSearch();
+    } else if ($(this).parents('#productNamesContainer-Inventory, #locationNamesContainer-Inventory').length) {
+      performSearch1();
+    } else if ($(this).parents('#productNamesContainer-damage, #locationNamesContainer-damage').length) {
+      performSearch2();
+    }
+  });
 });
 function show1() {
   $.ajax({
@@ -116,59 +118,79 @@ function show3(){
 }
 
 
-function attachSubmitHandler(containerSelector, url, word) {
-  $(containerSelector).on('click', '.btn-custom-selected', function () {
-    let selectedProducts = getSelectedProducts(word);
-    $.ajax({
-      url: url,
-      method: 'POST',
-      contentType: 'application/json;charset=UTF-8',
-      data: JSON.stringify({ selected_products: selectedProducts }),
-      success: function (response) {
-        // 清理上一次的搜索结果
-        $('.content_result').html(response);
-        saveLastRequest(url, 'GET', searchTerm);
-      },
-      error: function (error) {
-        console.log(error);
-      }
-    });
-  });
+function updateUIWithResults(response) {
+    $('.content_result').html(response);
 }
-function getSelectedProducts(attributeName) {
-  let selectedProducts = [];
+function performSearch() {
+    let selectedData = getSelectedData(['data-product-name', 'data-location-name']);
+    $.ajax({
+        url: '/search',
+        method: 'POST',
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(selectedData),
+        success: function (response) {
+            saveLastRequest(this.url,this.method,this.data);
+            updateUIWithResults(response);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+function performSearch1() {
+    let selectedData = getSelectedData(['data-product-name', 'data-location-name']);
+    $.ajax({
+        url: '/search_Inventory',
+        method: 'POST',
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(selectedData),
+        success: function (response) {
+            saveLastRequest(this.url,this.method,this.data);
+            updateUIWithResults(response);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+function performSearch2() {
+    let selectedData = getSelectedData(['data-product-name', 'data-location-name']);
+    $.ajax({
+        url: '/search_damage',
+        method: 'POST',
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(selectedData),
+        success: function (response) {
+            saveLastRequest(this.url,this.method,this.data);
+            updateUIWithResults(response);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+function getSelectedData(attributeNames) {
+  let selectedData = {};
+  attributeNames.forEach(attributeName => {
+    selectedData[attributeName] = [];
+  });
+
   let buttons = $('.btn-custom-selected');
 
   buttons.each(function() {
-    selectedProducts.push($(this).attr(attributeName));
+    attributeNames.forEach(attributeName => {
+      if ($(this).attr(attributeName)) {
+        selectedData[attributeName].push($(this).attr(attributeName));
+      }
+    });
   });
 
-  return selectedProducts;
+  return selectedData;
 }
 
 
-function attachButtonClickHandler(buttonSelector, operation) {
-  $(buttonSelector).click(function(event) {
-    event.preventDefault();
-    var searchIndex = $(this).data('search-option');
-    var user = $(this).data('user');
-    load_search_options(searchIndex, user, operation);
-  });
-}
 
-function load_search_options(searchIndex, user, operation) {
-  $.ajax({
-    url: '/load_sreach_options',
-    type: 'POST',
-    data: { searchIndex: searchIndex, user: user, operation: operation },
-    success: function(response) {
-      $('.content').html(response);
-    },
-    error: function(error) {
-      console.log('Ajax request error:', error);
-    }
-  });
-}
 
 function saveLastRequest(url, method, params) {
   var request = {

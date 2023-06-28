@@ -84,12 +84,8 @@ def load_page():
         print("搜索物品名：", product_names)
         print("搜索存储地：", location_names)
         cur.close()
-
-
-
-
+        conn.close()
         html_content = render_template('admin/edit_Item.html', username=user,product_names=product_names,location_names=location_names)
-
         html_result = render_template('admin/edit_Item_Result.html', username=user,results=results)
 
     # 出入库记录
@@ -140,23 +136,56 @@ def load_page():
     elif page_index == 3:
         conn = POOL.connection()
         cur = conn.cursor()
+
+        # 搜索全部的物品 展示到content_result 中
         cur.execute("SELECT * FROM inventory")
         results = cur.fetchall()
+
+        # 搜索全部的物品
+        cur.execute("SELECT * FROM inventory ")
+        results_Item_Name = cur.fetchall()
+        product_names = [result[1] for result in results_Item_Name]
+        product_names = list(set(product_names))
+        product_names.insert(0, "全部")
+        # product_names就是物品名 列表
+        # 搜索全部的Location
+        location_names = [result[2] for result in results_Item_Name]
+        location_names = list(set(location_names))
+        location_names.insert(0, "全部")
+        print("搜索结果：", results)
+        print("搜索物品名：", product_names)
+        print("搜索存储地：", location_names)
         cur.close()
         conn.close()
-
-        html_content = render_template('admin/search_Inventory.html', username=user)
-        html_result = render_template('admin/search_Inventory_Result.html', username=user,results=results)
+        html_content = render_template('admin/search_Inventory.html', username=user, product_names=product_names,location_names=location_names)
+        html_result = render_template('admin/search_Inventory_Result.html', username=user, results=results)
     elif page_index == 4:
+        # 报废
         conn = POOL.connection()
         cur = conn.cursor()
+
+        # 搜索全部的物品 展示到content_result 中
         cur.execute("SELECT * FROM inventory")
         results = cur.fetchall()
+
+        # 搜索全部的物品
+        cur.execute("SELECT * FROM inventory ")
+        results_Item_Name = cur.fetchall()
+        product_names = [result[1] for result in results_Item_Name]
+        product_names = list(set(product_names))
+        product_names.insert(0, "全部")
+        # product_names就是物品名 列表
+        # 搜索全部的Location
+        location_names = [result[2] for result in results_Item_Name]
+        location_names = list(set(location_names))
+        location_names.insert(0, "全部")
+        print("搜索结果：",results)
+        print("搜索物品名：", product_names)
+        print("搜索存储地：", location_names)
         cur.close()
         conn.close()
-
-        html_content = render_template('admin/search_damage.html', username=user)
-        html_result = render_template('admin/search_damage_Result.html', username=user,results=results)
+        html_content = render_template('admin/search_damage.html',username=user,product_names=product_names,location_names=location_names)
+        html_result = render_template('admin/search_damage_Result.html',username=user,results=results)
     elif page_index == 5:
 
         conn = POOL.connection()

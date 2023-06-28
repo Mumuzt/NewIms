@@ -35,12 +35,19 @@ def save_number_and_log():
     print("更新库存/盘点/报废")
     item_id = request.form.get('id')
     value = request.form.get('value')
-    user = request.form.get('user')
+    user = request.form.get('username')
     item = request.form.get('item')
     location = request.form.get('location')
-    operation = request.form.get('operation')  # 新增一个名为operation的参数来区分不同的操作
+    operation = request.form.get('operation')
+    # 新增一个名为operation的参数来区分不同的操作
 
-    print(item_id, value, user, item,operation,location)
+    print("id:%s   ,"
+          "盘点数量：%s    ，"
+          "用户：%s    ，"
+          "盘点物品：%s    ，"
+          "行为：%s    ，"
+          "存储地点：%s    "
+          %(item_id, value, user, item,operation,location))
 
     try:
         conn = POOL.connection()
